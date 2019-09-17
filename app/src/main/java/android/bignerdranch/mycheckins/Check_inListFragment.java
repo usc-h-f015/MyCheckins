@@ -1,5 +1,6 @@
 package android.bignerdranch.mycheckins;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +23,25 @@ public class Check_inListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_in_list, container, false);
-        mCheck_inRecyclerView = (RecyclerView) view
-                .findViewById(R.id.check_in_recycler_view);
+        mCheck_inRecyclerView = (RecyclerView) view.findViewById(R.id.check_in_recycler_view);
         mCheck_inRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
     private void updateUI() {
         Check_inLab check_inLab = Check_inLab.get(getActivity());
         List<Check_in> checkins = check_inLab.getCheckins();
+        if (mAdapter == null) {
         mAdapter = new Check_inAdapter(checkins);
         mCheck_inRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class Check_inHolder extends RecyclerView.ViewHolder
@@ -45,6 +54,7 @@ public class Check_inListFragment extends Fragment {
 
         public Check_inHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_check_in, parent, false));
+            itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.check_in_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.date_picker_title);
             mPlaceTextView = (TextView) itemView.findViewById(R.id.check_in_place);
@@ -57,9 +67,11 @@ public class Check_inListFragment extends Fragment {
         }
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(),
+            /*Toast.makeText(getActivity(),
                     mCheck_in.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+                    .show();*/
+            Intent intent = MainActivity.newIntent(getActivity(), mCheck_in.getId());
+            startActivity(intent);
         }
     }
 
