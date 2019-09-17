@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MyCheckins</string>
+    <string name="check_in_title">Title</string>
+    <string name="check_ins_title_hint">Enter a title for the check_in.</string>
+    <string name="check_in_place">Place</string>
+    <string name="check_in_details_label">Details</string>
+    <string name="date_picker_title">Date of check_in:</string>
+    <string name="check_in_location">Location</string>
+    <string name="imageView1">Image</string>
+    <string name="btnChangeImage">Update Image</string>
+    <string name="shareInformation">Share Information</string>
+    <string name="new_record">New Check_in</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$d check_ins</string>
+    <string name="remove_check_in">remove check_in</string>
 </resources>

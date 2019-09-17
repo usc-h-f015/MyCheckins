@@ -2,13 +2,11 @@ package android.bignerdranch.mycheckins;
 
 import android.location.Geocoder;
 import android.media.Image;
-
 import androidx.core.app.ShareCompat;
-
 import java.util.Date;
 import java.util.UUID;
 
-public class CheckingTemp {
+public class Check_in {
 
     private UUID mId;
     private String mTitle;
@@ -19,7 +17,7 @@ public class CheckingTemp {
     private Image mImage;
     private ShareCompat mShare;
 
-    public CheckingTemp() {
+    public Check_in() {
         mId = UUID.randomUUID();
         mDate = new Date();
     }
