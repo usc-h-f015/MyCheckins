@@ -20,15 +20,12 @@ public class Check_inLab {
     }
     private Check_inLab(Context context) {
         mCheckins = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            Check_in check_in = new Check_in();
-            check_in.setTitle("Check-in #" + i);
-            //check_in.setDate("Date #" + i);
-            check_in.setPlace("Place #" + i);
-            //check_in.setSolved(i % 2 == 0); // Every other one
-            mCheckins.add(check_in);
-        }
     }
+
+    public void addCheck_in(Check_in c) {
+        mCheckins.add(c);
+    }
+
     public List<Check_in> getCheckins() {
         return mCheckins;
     }
