@@ -1,6 +1,8 @@
 package android.bignerdranch.mycheckins;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,11 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class Check_in_Fragment extends Fragment {
     private static final String ARG_CHECK_IN_ID = "check_in_id";
+    private static final String DIALOG_DATE = "DialogDate";
+    private static final int REQUEST_DATE = 0;
+
     private Check_in mCheck_in;
     private EditText mTitleField;
     private EditText mPlaceField;
@@ -34,9 +41,10 @@ public class Check_in_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID check_inId = (UUID) getArguments().getSerializable(ARG_CHECK_IN_ID);
         mCheck_in = Check_inLab.get(getActivity()).getCheck_in(check_inId);
+
     }
 
-    @SuppressLint("WrongViewCast")
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,9 +112,33 @@ public class Check_in_Fragment extends Fragment {
         });
 
         mDateButton = (Button) v.findViewById(R.id.date_picker_title);
-        mDateButton.setText(mCheck_in.getDate().toString());
-        mDateButton.setEnabled(false);
+        updateDate();
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment
+                        .newInstance(mCheck_in.getDate());
+                dialog.setTargetFragment(Check_in_Fragment.this, REQUEST_DATE);
+                dialog.show(manager, DIALOG_DATE);
+            } });
 
         return v;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data
+                    .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCheck_in.setDate(date);
+            updateDate();
+        }
+    }
+
+    private void updateDate() {
+        mDateButton.setText(mCheck_in.getDate().toString());
     }
 }

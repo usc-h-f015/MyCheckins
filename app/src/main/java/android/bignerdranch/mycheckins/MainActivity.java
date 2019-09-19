@@ -2,12 +2,25 @@ package android.bignerdranch.mycheckins;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.widget.DatePicker;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class MainActivity extends SingleFragmentActivity {
+
+    private static final String ARG_DATE = "date";
+    private DatePicker mDatePicker;
+    public static DatePickerFragment newInstance(Date date) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_DATE, date);
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public static final String EXTRA_CHECK_IN_ID =
             "com.bignerdranch.android.mycheckins.check_in_id";
