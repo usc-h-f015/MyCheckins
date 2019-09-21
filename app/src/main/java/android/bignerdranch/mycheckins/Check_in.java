@@ -1,6 +1,5 @@
 package android.bignerdranch.mycheckins;
 
-import android.location.Geocoder;
 import android.media.Image;
 import androidx.core.app.ShareCompat;
 import java.util.Date;
@@ -13,9 +12,13 @@ public class Check_in {
     private  String mPlace;
     private  String mDetails;
     private Date mDate;
-    private Geocoder mLocation;
+    private String mLocation;
     private Image mImage;
     private ShareCompat mShare;
+    private String mLatitude;
+    private String mLongitude;
+
+
 
     public Check_in() {
         mId = UUID.randomUUID();
@@ -47,10 +50,23 @@ public class Check_in {
     public void setDate(Date date) {
         mDate = date;
     }
-    public Geocoder getLocation() {
+    public void setLatitude(String latitude){
+        mLatitude = latitude;
+    }
+    public String getLatitude(){
+        return mLatitude;
+    }
+    public void setmLongitude(String longitude){
+        mLongitude = longitude;
+    }
+    public String getmLongitude(){
+        return mLongitude;
+    }
+
+    public String getLocation() {
         return mLocation;
     }
-    public void setLocation(Geocoder location) {
+    public void setLocation(String location) {
         mLocation = location;
     }
     public Image getImage() {
@@ -65,4 +81,5 @@ public class Check_in {
     public void setShare(ShareCompat share) {
         mShare = share;
     }
+
 }

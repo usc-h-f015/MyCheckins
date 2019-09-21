@@ -5,7 +5,8 @@
     <string name="check_in_place">Place</string>
     <string name="check_in_details_label">Details</string>
     <string name="date_picker_title">Date of check_in:</string>
-    <string name="check_in_location">Location</string>
+    <string name="show_location">Location</string>
+    <string name="check_in_location">Show map</string>
     <string name="imageView1">Image</string>
     <string name="btnChangeImage">Update Image</string>
     <string name="shareInformation">Share Information</string>
