@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentManager;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class Check_in_Fragment extends Fragment implements LocationListener{
@@ -45,19 +46,17 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private EditText mPlaceField;
     private EditText mDetailsField;
     private Button mDateButton;
+    private MapGoogle mMapGoogle;
+    private Button mShowLocationButton;
 
-    /*private static final int REQUEST_LOCATION=1;
-    Button getlocationbtn;
-    TextView showLocationText;
-    LocationManager locationManager;
-    String latitude,longitude;*/
+
 
     final String TAG = "GPS";
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     Button getlocationbtn;
-    TextView tvLatitude, tvLongitude, tvTime;
+    TextView tvLatitude, tvLongitude;
     LocationManager locationManager;
     Location loc;
     ArrayList<String> permissions = new ArrayList<>();
@@ -161,6 +160,16 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                 dialog.setTargetFragment(Check_in_Fragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
             } });
+
+        mShowLocationButton = (Button) v.findViewById(R.id.check_in_location);
+        mShowLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapGoogle map = new MapGoogle();
+                Intent intent = new Intent(getActivity(), MapGoogle.class);
+                startActivity(intent);
+            } });
+
         tvLatitude = (TextView) v.findViewById(R.id.tvLatitude);
         tvLatitude.setText(mCheck_in.getLatitude());
         tvLatitude.addTextChangedListener(new TextWatcher() {
@@ -198,24 +207,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
             }
         });
 
-        getlocationbtn= (Button) v.findViewById(R.id.getLocation);
-        getlocationbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                locationManager=(LocationManager) getActivity().getSystemService(Service.LOCATION_SERVICE);
-                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-
-                    getLocation();
-                }
-                else{
-                    updateLocation();
-                }
-
-
-
-            }
-
-        });
 
         locationManager = (LocationManager) getActivity().getSystemService(Service.LOCATION_SERVICE);
         isGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -247,24 +238,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         return v;
     }
 
-        /*ActivityCompat.requestPermissions(getActivity(), new String[]
-                {android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        showLocationText= (TextView) v.findViewById(R.id.show_location);
-        getlocationbtn= (Button) v.findViewById(R.id.getLocation);
-        getlocationbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                locationManager=(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-
-                    OnGPS();
-                }
-                else {
-                    getLocation();
-                }
-            }
-
-        });*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -290,58 +263,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
 
     }
-   /*private void OnGPS(){
 
-        final AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
-        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        }).setNegativeButton(("NO"), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            dialog.cancel();
-
-            }
-        });
-        final AlertDialog alertDialog=builder.create();
-        alertDialog.show();
-        }
-    private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions( getActivity(), new String[]{
-                    android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-            Location LocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Location LocationNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Location LocationPassive = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-            if (LocationGPS != null) {
-                double lat = LocationGPS.getLatitude();
-                double longi = LocationGPS.getLongitude();
-                latitude=String.valueOf(lat);
-                longitude=String.valueOf(longi);
-                showLocationText.setText("your Location " + " \n" + "Latitude= " + latitude + "\n" + "Longitude= " + longitude);
-
-            } else if (LocationNetwork != null) {
-                double lat = LocationNetwork.getLatitude();
-                double longi = LocationNetwork.getLongitude();
-                latitude=String.valueOf(lat);
-                longitude=String.valueOf(longi);
-                showLocationText.setText("your Location " + " \n" + "Latitude= " + latitude + "\n" + "Longitude= " + longitude);
-            } else if (LocationPassive != null) {
-                double lat = LocationPassive.getLatitude();
-                double longi = LocationPassive.getLongitude();
-                latitude=String.valueOf(lat);
-                longitude=String.valueOf(longi);
-                showLocationText.setText("your Location " + " \n" + "Latitude= " + latitude + "\n" + "Longitude= " + longitude);
-            } else {
-                Toast.makeText(getActivity(), "Can't Get Your Location", Toast.LENGTH_LONG).show();
-            }
-        }
-    }*/
 
     @Override
     public void onLocationChanged(Location location) {

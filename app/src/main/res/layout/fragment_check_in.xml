@@ -36,7 +36,7 @@
         android:id="@+id/date_picker_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#2A7BB2"
+        android:backgroundTint="#236A9A"
         android:textColor="#ffff" />
 
     <LinearLayout
@@ -95,19 +95,10 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/getLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#2A7BB2"
-            android:text="GET LOCATION"
-            android:textColor="#ffff"/>
-
-        <Button
             android:id="@+id/check_in_location"
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#2A7BB2"
+            android:backgroundTint="#236A9A"
             android:text="Show map"
             android:textColor="#ffff" />
 
@@ -128,7 +119,7 @@
             android:id="@+id/shareInformation"
             android:layout_width="186dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="#2A7BB2"
+            android:backgroundTint="#236A9A"
             android:text="Share information"
             android:textColor="#ffff" />
 
@@ -136,7 +127,7 @@
             android:id="@+id/btnChangeImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#2A7BB2"
+            android:backgroundTint="#236A9A"
             android:text="Change Image"
             android:textColor="#ffff" />
     </LinearLayout>
