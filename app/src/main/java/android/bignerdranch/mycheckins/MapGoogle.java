@@ -2,21 +2,27 @@ package android.bignerdranch.mycheckins;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.location.Location;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapGoogle extends AppCompatActivity implements GoogleMap.OnMapLoadedCallback, OnMapReadyCallback {
+public class MapGoogle extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -33,12 +39,22 @@ public class MapGoogle extends AppCompatActivity implements GoogleMap.OnMapLoade
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10F));
     }
+
+   /* public void onLocationChanged(Location location) {
+        TextView locationTv = (TextView) findViewById(R.id.map);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
+        locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -65,10 +81,5 @@ public class MapGoogle extends AppCompatActivity implements GoogleMap.OnMapLoade
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onMapLoaded() {
-
     }
 }

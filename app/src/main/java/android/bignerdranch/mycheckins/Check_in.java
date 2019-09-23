@@ -63,6 +63,7 @@ public class Check_in {
     public String getmLongitude(){
         return mLongitude;
     }
+
     public void setShowLocation(Button showlocation) {
         mShowLocation = showlocation;
     }

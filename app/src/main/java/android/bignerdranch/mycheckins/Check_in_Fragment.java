@@ -13,6 +13,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -28,13 +29,23 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+
+import static java.lang.String.*;
 
 public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final String ARG_CHECK_IN_ID = "check_in_id";
@@ -46,8 +57,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private EditText mPlaceField;
     private EditText mDetailsField;
     private Button mDateButton;
-    private MapGoogle mMapGoogle;
     private Button mShowLocationButton;
+    private Button mTakePicture;
 
 
 
@@ -55,7 +66,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-    Button getlocationbtn;
     TextView tvLatitude, tvLongitude;
     LocationManager locationManager;
     Location loc;
@@ -161,14 +171,25 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                 dialog.show(manager, DIALOG_DATE);
             } });
 
+
         mShowLocationButton = (Button) v.findViewById(R.id.check_in_location);
         mShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 MapGoogle map = new MapGoogle();
                 Intent intent = new Intent(getActivity(), MapGoogle.class);
                 startActivity(intent);
             } });
+
+        mTakePicture = (Button) v.findViewById(R.id.btnChangeImage);
+        mTakePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TakePicture.class);
+                startActivity(intent);
+            } });
+
 
         tvLatitude = (TextView) v.findViewById(R.id.tvLatitude);
         tvLatitude.setText(mCheck_in.getLatitude());
@@ -180,7 +201,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mCheck_in.setLatitude(s.toString());
+                tvLatitude.setText(Double.toString(loc.getLatitude()));
             }
 
             @Override
@@ -198,7 +219,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCheck_in.setmLongitude(s.toString());
+                tvLongitude.setText(Double.toString(loc.getLongitude()));
             }
 
             @Override

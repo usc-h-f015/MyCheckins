@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp"
     android:orientation="vertical">
 
@@ -35,9 +36,11 @@
     <Button
         android:id="@+id/date_picker_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#236A9A"
-        android:textColor="#ffff" />
+        android:layout_height="30dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#3195D8"
+        android:textColor="#ffff"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,45 +94,56 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/check_in_location"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#236A9A"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#2ABED6"
             android:text="Show map"
-            android:textColor="#ffff" />
+            android:textColor="#ffff"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
-        android:layout_height="68dp" />
+        android:layout_height="215dp" />
     <!--android:src="@drawable/android"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/shareInformation"
-            android:layout_width="186dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#236A9A"
-            android:text="Share information"
-            android:textColor="#ffff" />
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btnChangeImage"
-            android:layout_width="match_parent"
+            android:layout_width="127dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="#236A9A"
-            android:text="Change Image"
-            android:textColor="#ffff" />
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#3195D8"
+            android:text="Take Photo"
+            android:textColor="#ffff"
+            android:textSize="14sp" />
+
+        <Space
+            android:layout_width="127dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/shareInformation"
+            android:layout_width="127dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#3195D8"
+            android:text="Share"
+            android:textColor="#ffff"
+            android:textColorLink="#00A35656"
+            android:textSize="14sp" />
+
     </LinearLayout>
 
 </LinearLayout>
