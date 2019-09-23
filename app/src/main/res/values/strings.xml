@@ -15,7 +15,7 @@
     <string name="help">help</string>
     <string name="hide_check_ins">Hide Check-ins</string>
     <string name="subtitle_format">%1$d records</string>
-    <string name="remove_check_in">remove check_in</string>
+    <string name="delete_check_in">Delete Check in</string>
     <string name="normal_map">Normal Map</string>
     <string name="hybrid_map">Hybrid Map</string>
     <string name="satellite_map">Satellite Map</string>

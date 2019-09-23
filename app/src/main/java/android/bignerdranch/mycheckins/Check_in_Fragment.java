@@ -5,15 +5,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -21,31 +18,23 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
-import static java.lang.String.*;
 
 public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final String ARG_CHECK_IN_ID = "check_in_id";
@@ -87,7 +76,9 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         UUID check_inId = (UUID) getArguments().getSerializable(ARG_CHECK_IN_ID);
         mCheck_in = Check_inLab.get(getActivity()).getCheck_in(check_inId);
     }
@@ -258,6 +249,29 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         }
         return v;
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_check_in, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_delete_check_in:
+
+                Check_inLab.get(getActivity()).removeCheck_in(mCheck_in);
+                //                Intent intent = new Intent(getActivity(), CrimeListActivity.class);
+                //                startActivity(intent);
+                getActivity().finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
 
     @Override
@@ -278,12 +292,12 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
 
         }
-    private void updateLocation(){
+    /*private void updateLocation(){
         tvLatitude.setText(Double.toString(loc.getLatitude()));
         tvLongitude.setText(Double.toString(loc.getLongitude()));
 
 
-    }
+    }*/
 
 
     @Override

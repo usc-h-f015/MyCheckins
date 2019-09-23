@@ -21,6 +21,7 @@ public class Check_in {
     private String mLongitude;
     private Button mShowLocation;
 
+
     public Check_in() {
         mId = UUID.randomUUID();
         mDate = new Date();
@@ -89,5 +90,7 @@ public class Check_in {
     public void setShare(ShareCompat share) {
         mShare = share;
     }
+
+
 
 }

@@ -1,8 +1,6 @@
 package android.bignerdranch.mycheckins;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,9 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -77,13 +73,6 @@ public class Check_inListFragment extends Fragment {
                 mSubtitleVisible = !mSubtitleVisible; getActivity().invalidateOptionsMenu();
                 updateSubtitle();
                 return true;
- /*           case R.id.help:
-                Check_in help = new Check_in();
-                Check_inLab.get(getActivity()).addCheck_in(help);
-                Intent helpIintent = MainActivity
-                        .newIntent(getActivity(), help.getId());
-                startActivity(helpIintent);
-                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -140,9 +129,6 @@ public class Check_inListFragment extends Fragment {
         }
         @Override
         public void onClick(View view) {
-            /*Toast.makeText(getActivity(),
-                    mCheck_in.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();*/
             Intent intent = MainActivity.newIntent(getActivity(), mCheck_in.getId());
             startActivity(intent);
         }

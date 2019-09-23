@@ -1,7 +1,7 @@
 package android.bignerdranch.mycheckins;
 
 import android.content.Context;
-import android.widget.LinearLayout;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,4 +37,9 @@ public class Check_inLab {
         }
         return null;
     }
+
+    public void removeCheck_in(Check_in check_in) {
+        mCheckins.remove(check_in);
+    }
 }
+
