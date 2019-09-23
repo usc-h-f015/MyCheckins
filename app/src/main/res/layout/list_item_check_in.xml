@@ -4,27 +4,38 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="5dp"
+    android:layout_margin="1dp"
+    android:divider="?dividerHorizontal"
+    android:showDividers="end">
 
     <TextView
         android:id="@+id/check_in_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:text="Crime Title">
-
-    </TextView>
-    <TextView
-        android:id="@+id/date_picker_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Check-in Date">
 
     </TextView>
     <TextView
         android:id="@+id/check_in_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:text="Check-in Place">
+    </TextView>
+    <TextView
+        android:id="@+id/date_picker_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        android:text="Check-in Date">
 
     </TextView>
 

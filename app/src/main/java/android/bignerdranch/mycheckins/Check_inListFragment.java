@@ -1,6 +1,7 @@
 package android.bignerdranch.mycheckins;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class Check_inListFragment extends Fragment {
+
+
 
     private RecyclerView mCheck_inRecyclerView;
     private Check_inAdapter mAdapter;
@@ -123,6 +126,9 @@ public class Check_inListFragment extends Fragment {
             super(inflater.inflate(R.layout.list_item_check_in, parent, false));
             itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.check_in_title);
+            //Typeface roboto =Typeface.createFromAsset(getContext().getAssets(), "font/Robot-Bold.ttf");
+            //mTitleTextView.setTypeface(roboto);
+
             mDateTextView = (TextView) itemView.findViewById(R.id.date_picker_title);
             mPlaceTextView = (TextView) itemView.findViewById(R.id.check_in_place);
 
