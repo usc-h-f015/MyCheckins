@@ -1,6 +1,5 @@
 package android.bignerdranch.mycheckins;
 
-import android.net.Uri;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -79,7 +78,7 @@ public class Check_in {
     public void setLocation(String location) {
         mLocation = location;
     }*/
-    public Uri getImage() {
+    public ImageView getImage() {
         return mImage;
     }
     public void setImage(ImageView image) {
