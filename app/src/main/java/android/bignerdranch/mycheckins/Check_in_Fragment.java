@@ -266,6 +266,24 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
         mImageView = v.findViewById(R.id.image_view);
         mImageView.setImageURI(mCheck_in.getImage());
 
+
+       /* mImageView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mImageView.setImageURI(mCheck_in.getImage());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });*/
+
         mCaptureBtn = v. findViewById(R.id.capture_image_btn);
         mCaptureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
