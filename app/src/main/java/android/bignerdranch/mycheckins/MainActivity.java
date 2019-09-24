@@ -3,17 +3,26 @@ package android.bignerdranch.mycheckins;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.DatePicker;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 public class MainActivity extends SingleFragmentActivity {
 
     private static final String ARG_DATE = "date";
+    private static final String ARG_MAP = "showmap";
     private DatePicker mDatePicker;
+    private GoogleMap mGoogleMap;
+
+
     public static DatePickerFragment newInstance(Date date) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_DATE, date);

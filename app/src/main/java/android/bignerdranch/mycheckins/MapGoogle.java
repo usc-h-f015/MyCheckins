@@ -1,6 +1,8 @@
 package android.bignerdranch.mycheckins;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapGoogle extends AppCompatActivity implements OnMapReadyCallback {
+public class MapGoogle extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 

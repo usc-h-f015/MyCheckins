@@ -5,14 +5,18 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,18 +29,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import static android.app.Activity.RESULT_OK;
 
-public class Check_in_Fragment extends Fragment implements LocationListener{
+//OnMapReadyCallback
+
+public class Check_in_Fragment extends Fragment implements LocationListener {
     private static final String ARG_CHECK_IN_ID = "check_in_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
@@ -48,13 +66,20 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private Button mDateButton;
     private Button mShowLocationButton;
     private Button mTakePicture;
+    GoogleMap mMap;
+    SupportMapFragment mapFragment;
 
+    Button mCaptureBtn;
+    ImageView mImageView;
+    Uri image_uri;
 
 
     final String TAG = "GPS";
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final int PERMISSION_CODE = 1000;
+    private static final int IMAGE_CAPTURE_CODE = 1001;
     TextView tvLatitude, tvLongitude;
     LocationManager locationManager;
     Location loc;
@@ -167,20 +192,10 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         mShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                MapGoogle map = new MapGoogle();
                 Intent intent = new Intent(getActivity(), MapGoogle.class);
                 startActivity(intent);
-            } });
-
-        mTakePicture = (Button) v.findViewById(R.id.btnChangeImage);
-        mTakePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TakePicture.class);
-                startActivity(intent);
-            } });
-
+            }
+        });
 
         tvLatitude = (TextView) v.findViewById(R.id.tvLatitude);
         tvLatitude.setText(mCheck_in.getLatitude());
@@ -247,12 +262,50 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
             // get location
             getLocation();
         }
+
+        mImageView = v.findViewById(R.id.image_view);
+        mImageView.setImageURI(mCheck_in.getImage());
+
+        mCaptureBtn = v. findViewById(R.id.capture_image_btn);
+        mCaptureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) ==
+                            PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                            PackageManager.PERMISSION_DENIED) {
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, PERMISSION_CODE);
+
+                    }
+                    else {
+                        openCamera();
+                    }
+                }else {
+                    openCamera();
+                }
+            }
+        });
+
+
+
         return v;
     }
+
+    private void openCamera(){
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
+        image_uri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.fragment_check_in, menu);
     }
 
@@ -276,7 +329,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == REQUEST_DATE) {
@@ -284,6 +337,9 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCheck_in.setDate(date);
             updateDate();
+        }
+        if (resultCode == RESULT_OK){
+            mImageView.setImageURI(image_uri);
         }
     }
 
@@ -405,6 +461,15 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
+            case PERMISSION_CODE: {
+                if (grantResults.length > 0 && grantResults [0] == PackageManager.PERMISSION_GRANTED){
+                    openCamera();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Permission denied...", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
             case ALL_PERMISSIONS_RESULT:
                 Log.d(TAG, "onRequestPermissionsResult");
                 for (String perms : permissionsToRequest) {
@@ -436,6 +501,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                 }
                 break;
         }
+
     }
 
     public void showSettingsAlert() {
@@ -473,6 +539,11 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         tvLongitude.setText(Double.toString(loc.getLongitude()));
     }
 
+    private void updatePhoto() {
+        ContentValues values = new ContentValues();
+        image_uri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -480,6 +551,14 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
             locationManager.removeUpdates(this);
         }
     }
+
+
+
+
+    /*@Override
+    public void onMapReady(GoogleMap googleMap) {
+    mMap = googleMap;
+    }*/
 
 }
 

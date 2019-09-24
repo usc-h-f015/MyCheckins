@@ -1,7 +1,8 @@
 package android.bignerdranch.mycheckins;
 
-import android.media.Image;
+import android.net.Uri;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.core.app.ShareCompat;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class Check_in {
     private  String mDetails;
     private Date mDate;
     private String mLocation;
-    private Image mImage;
+    private ImageView mImage;
     private ShareCompat mShare;
     private String mLatitude;
     private String mLongitude;
@@ -78,10 +79,10 @@ public class Check_in {
     public void setLocation(String location) {
         mLocation = location;
     }*/
-    public Image getImage() {
+    public Uri getImage() {
         return mImage;
     }
-    public void setImage(Image image) {
+    public void setImage(ImageView image) {
         mImage = image;
     }
     public ShareCompat getShare() {
