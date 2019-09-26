@@ -30,13 +30,17 @@
             android:value="@string/map_key" />
 
         <activity android:name=".Check_inListActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:parentActivityName=".Check_inListActivity" />
+
     </application>
 
 </manifest>

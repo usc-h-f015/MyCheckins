@@ -3,9 +3,12 @@ package android.bignerdranch.mycheckins;
 import android.content.Context;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static android.content.Context.*;
 
 public class Check_inLab {
 

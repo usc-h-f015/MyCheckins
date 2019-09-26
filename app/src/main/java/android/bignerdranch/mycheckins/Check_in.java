@@ -2,7 +2,6 @@ package android.bignerdranch.mycheckins;
 
 import android.net.Uri;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.core.app.ShareCompat;
 import java.util.Date;

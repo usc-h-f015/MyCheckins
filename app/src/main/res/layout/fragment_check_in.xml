@@ -129,7 +129,7 @@
 
         <Button
             android:id="@+id/capture_image_btn"
-            android:layout_width="127dp"
+            android:layout_width="191dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#3195D8"
@@ -137,13 +137,9 @@
             android:textColor="#ffff"
             android:textSize="14sp" />
 
-        <Space
-            android:layout_width="127dp"
-            android:layout_height="match_parent" />
-
         <Button
             android:id="@+id/shareInformation"
-            android:layout_width="127dp"
+            android:layout_width="186dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#3195D8"

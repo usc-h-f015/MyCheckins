@@ -32,20 +32,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -59,15 +49,16 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
 
+
     private Check_in mCheck_in;
     private EditText mTitleField;
     private EditText mPlaceField;
     private EditText mDetailsField;
     private Button mDateButton;
     private Button mShowLocationButton;
-    private Button mTakePicture;
-    GoogleMap mMap;
-    SupportMapFragment mapFragment;
+    TextView tvLatitude;
+    TextView tvLongitude;
+
 
     Button mCaptureBtn;
     ImageView mImageView;
@@ -80,7 +71,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final int PERMISSION_CODE = 1000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
-    TextView tvLatitude, tvLongitude;
+
     LocationManager locationManager;
     Location loc;
     ArrayList<String> permissions = new ArrayList<>();
@@ -185,7 +176,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
                         .newInstance(mCheck_in.getDate());
                 dialog.setTargetFragment(Check_in_Fragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
-            } });
+            }
+        });
 
 
         mShowLocationButton = (Button) v.findViewById(R.id.check_in_location);
@@ -199,6 +191,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
         tvLatitude = (TextView) v.findViewById(R.id.tvLatitude);
         tvLatitude.setText(mCheck_in.getLatitude());
+
         tvLatitude.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -207,7 +200,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvLatitude.setText(Double.toString(loc.getLatitude()));
+                mCheck_in.setLatitude(s.toString());
             }
 
             @Override
@@ -215,6 +208,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
             }
         });
+
         tvLongitude = (TextView) v.findViewById(R.id.tvLongitude);
         tvLongitude.setText(mCheck_in.getmLongitude());
         tvLongitude.addTextChangedListener(new TextWatcher() {
@@ -225,7 +219,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvLongitude.setText(Double.toString(loc.getLongitude()));
+                mCheck_in.setmLongitude(s.toString());
+                //tvLongitude.setText(mCheck_in.getmLongitude());
             }
 
             @Override
@@ -263,8 +258,12 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
             getLocation();
         }
 
+
         mImageView = v.findViewById(R.id.image_view);
         mImageView.setImageURI(mCheck_in.getImage());
+
+
+
 
 
        /* mImageView.addTextChangedListener(new TextWatcher() {
@@ -325,6 +324,9 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_check_in, menu);
+
+        //inflater.inflate(R.menu.map_options, menu);
+
     }
 
     @Override
@@ -337,7 +339,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
                 //                startActivity(intent);
                 getActivity().finish();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -347,7 +348,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK) {
             return;
         }
         if (requestCode == REQUEST_DATE) {
@@ -355,10 +356,16 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCheck_in.setDate(date);
             updateDate();
-        }
+       }
         if (resultCode == RESULT_OK){
-            mImageView.setImageURI(image_uri);
-        }
+            mCheck_in.setImage(image_uri);
+            updatePhoto();
+
+        }/*if (permissions == permissions){
+            mCheck_in.setLatitude(toString());
+            mCheck_in.setLatitude(toString());
+            updateLocation();
+        }*/
     }
 
     private void updateDate() {
@@ -366,12 +373,12 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
 
         }
-    /*private void updateLocation(){
-        tvLatitude.setText(Double.toString(loc.getLatitude()));
-        tvLongitude.setText(Double.toString(loc.getLongitude()));
+    private void updateLocation(){
+        tvLatitude.setText(mCheck_in.getLatitude());
+        tvLongitude.setText(mCheck_in.getmLongitude());
 
 
-    }*/
+    }
 
 
     @Override
@@ -472,7 +479,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     }
 
     private boolean canAskPermission() {
-        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.M);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -553,13 +560,13 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
     private void updateUI(Location loc) {
         Log.d(TAG, "updateUI");
-        tvLatitude.setText(Double.toString(loc.getLatitude()));
+        tvLatitude.setText( Double.toString(loc.getLatitude()));
         tvLongitude.setText(Double.toString(loc.getLongitude()));
     }
 
+
     private void updatePhoto() {
-        ContentValues values = new ContentValues();
-        image_uri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        mImageView.setImageURI(mCheck_in.getImage());
     }
 
     @Override
