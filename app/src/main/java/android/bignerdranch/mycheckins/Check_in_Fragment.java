@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,6 +33,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -56,8 +59,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private EditText mDetailsField;
     private Button mDateButton;
     private Button mShowLocationButton;
-    TextView tvLatitude;
-    TextView tvLongitude;
+
 
 
     Button mCaptureBtn;
@@ -69,9 +71,12 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+
     private static final int PERMISSION_CODE = 1000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
 
+    TextView tvLatitude;
+    TextView tvLongitude;
     LocationManager locationManager;
     Location loc;
     ArrayList<String> permissions = new ArrayList<>();
@@ -189,9 +194,9 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
             }
         });
 
+
         tvLatitude = (TextView) v.findViewById(R.id.tvLatitude);
         tvLatitude.setText(mCheck_in.getLatitude());
-
         tvLatitude.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -228,6 +233,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
             }
         });
+
 
 
         locationManager = (LocationManager) getActivity().getSystemService(Service.LOCATION_SERVICE);
@@ -403,6 +409,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
             locationManager.removeUpdates(this);
         }
     }
+
     private void getLocation() {
         try {
             if (canGetLocation) {
@@ -458,6 +465,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
         }
     }
 
+
+
     private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
         ArrayList result = new ArrayList();
 
@@ -473,6 +482,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private boolean hasPermission(String permission) {
         if (canAskPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (getContext().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
             }
         }
         return true;
@@ -560,8 +570,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
 
     private void updateUI(Location loc) {
         Log.d(TAG, "updateUI");
-        tvLatitude.setText( Double.toString(loc.getLatitude()));
-        tvLongitude.setText(Double.toString(loc.getLongitude()));
+        tvLatitude.setText(String.valueOf(loc.getLatitude()));
+        tvLongitude.setText(String.valueOf(loc.getLongitude()));
     }
 
 
@@ -569,13 +579,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
         mImageView.setImageURI(mCheck_in.getImage());
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
-    }
+
 
 
 
