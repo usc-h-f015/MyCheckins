@@ -34,11 +34,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import java.io.File;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -47,7 +58,7 @@ import static android.app.Activity.RESULT_OK;
 
 //OnMapReadyCallback
 
-public class Check_in_Fragment extends Fragment implements LocationListener {
+public class Check_in_Fragment extends Fragment implements LocationListener, OnMapReadyCallback {
     private static final String ARG_CHECK_IN_ID = "check_in_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
@@ -59,7 +70,8 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     private EditText mDetailsField;
     private Button mDateButton;
     private Button mShowLocationButton;
-
+    private GoogleMap mMap;
+    private SupportMapFragment mSupportMapFragment;
 
 
     Button mCaptureBtn;
@@ -185,12 +197,41 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
         });
 
 
+
         mShowLocationButton = (Button) v.findViewById(R.id.check_in_location);
         mShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapGoogle.class);
                 startActivity(intent);
+
+                /*mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                if (mSupportMapFragment == null) {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    mSupportMapFragment = SupportMapFragment.newInstance();
+                    fragmentTransaction.replace(R.id.map, mSupportMapFragment).commit();
+                }
+
+                if (mSupportMapFragment != null) {
+                    mSupportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            if (googleMap != null) {
+
+                                googleMap.getUiSettings().setAllGesturesEnabled(true);
+
+                                LatLng sydney = new LatLng(-34, 151);
+                                // MAKE THIS WHATEVER YOU WANT
+
+                                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(15.0f).build();
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                                googleMap.moveCamera(cameraUpdate);
+
+                            }
+                        }
+                    });
+                }*/
             }
         });
 
@@ -269,26 +310,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
         mImageView.setImageURI(mCheck_in.getImage());
 
 
-
-
-
-       /* mImageView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mImageView.setImageURI(mCheck_in.getImage());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
-
         mCaptureBtn = v. findViewById(R.id.capture_image_btn);
         mCaptureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -348,6 +369,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
             default:
                 return super.onOptionsItemSelected(item);
 
+
         }
     }
 
@@ -390,7 +412,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged");
-        updateUI(location);
+        //updateUI(location);
     }
 
     @Override
@@ -580,14 +602,14 @@ public class Check_in_Fragment extends Fragment implements LocationListener {
     }
 
 
-
-
-
-
-    /*@Override
+   @Override
     public void onMapReady(GoogleMap googleMap) {
-    mMap = googleMap;
-    }*/
+       mMap = googleMap;
+       LatLng checkin = new LatLng(loc.getLatitude(), loc.getLatitude());
+       mMap.addMarker(new MarkerOptions().position(checkin).title("You are here"));
+       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(checkin, 10F));
+   }
+
 
 }
 

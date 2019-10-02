@@ -133,8 +133,8 @@
 
         <Button
             android:id="@+id/capture_image_btn"
-            android:layout_width="191dp"
-            android:layout_height="wrap_content"
+            android:layout_width="184dp"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#3195D8"
             android:text="Take Photo"
@@ -143,8 +143,8 @@
 
         <Button
             android:id="@+id/shareInformation"
-            android:layout_width="186dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#3195D8"
             android:text="Share"
@@ -152,6 +152,9 @@
             android:textColorLink="#00A35656"
             android:textSize="14sp" />
 
+
     </LinearLayout>
+
+
 
 </LinearLayout>
