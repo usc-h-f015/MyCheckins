@@ -3,6 +3,7 @@ package android.bignerdranch.mycheckins;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
@@ -10,22 +11,22 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapGoogle extends FragmentActivity implements OnMapReadyCallback {
+public class MapGoogle extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
 
+
+    GoogleMap mMap;
+    private Check_in mCheck_in;
+    private Double mLat;
+    private Double mLon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +68,15 @@ public class MapGoogle extends FragmentActivity implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(MenuItem item){
         //Change the map type based on the users selection.
         switch (item.getItemId()){
-            case   (R.id.normal_map):
+            case R.id.normal_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             return true;
-            case  (R.id.hybrid_map):
+            case R.id.hybrid_map:
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
             return true;
-            case (R.id.satellite_map):
+            case R.id.satellite_map:
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            case (R.id.terrain_map):
+            case R.id.terrain_map:
             mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
             return true;
             default:

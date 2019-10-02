@@ -58,7 +58,7 @@ import static android.app.Activity.RESULT_OK;
 
 //OnMapReadyCallback
 
-public class Check_in_Fragment extends Fragment implements LocationListener, OnMapReadyCallback {
+public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final String ARG_CHECK_IN_ID = "check_in_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
@@ -204,34 +204,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener, OnM
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapGoogle.class);
                 startActivity(intent);
-
-                /*mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                if (mSupportMapFragment == null) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    mSupportMapFragment = SupportMapFragment.newInstance();
-                    fragmentTransaction.replace(R.id.map, mSupportMapFragment).commit();
-                }
-
-                if (mSupportMapFragment != null) {
-                    mSupportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                        @Override
-                        public void onMapReady(GoogleMap googleMap) {
-                            if (googleMap != null) {
-
-                                googleMap.getUiSettings().setAllGesturesEnabled(true);
-
-                                LatLng sydney = new LatLng(-34, 151);
-                                // MAKE THIS WHATEVER YOU WANT
-
-                                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(15.0f).build();
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-                                googleMap.moveCamera(cameraUpdate);
-
-                            }
-                        }
-                    });
-                }*/
             }
         });
 
@@ -600,15 +572,6 @@ public class Check_in_Fragment extends Fragment implements LocationListener, OnM
     private void updatePhoto() {
         mImageView.setImageURI(mCheck_in.getImage());
     }
-
-
-   @Override
-    public void onMapReady(GoogleMap googleMap) {
-       mMap = googleMap;
-       LatLng checkin = new LatLng(loc.getLatitude(), loc.getLatitude());
-       mMap.addMarker(new MarkerOptions().position(checkin).title("You are here"));
-       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(checkin, 10F));
-   }
 
 
 }
