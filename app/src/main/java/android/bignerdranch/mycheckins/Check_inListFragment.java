@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,8 @@ public class Check_inListFragment extends Fragment {
     private RecyclerView mCheck_inRecyclerView;
     private Check_inAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private WebView mWebView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class Check_inListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_check_in_list, container, false);
         mCheck_inRecyclerView = (RecyclerView) view.findViewById(R.id.check_in_recycler_view);
         mCheck_inRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //mWebView = (WebView) view.findViewById(R.id.webView);
+        //mWebView.setWebViewClient(new WebViewClient());
         updateUI();
         return view;
     }
@@ -57,6 +63,7 @@ public class Check_inListFragment extends Fragment {
         } else {
             subtitleItem.setTitle(R.string.show_check_ins);
         }
+
     }
 
     @Override
@@ -72,6 +79,9 @@ public class Check_inListFragment extends Fragment {
             case R.id.Show_check_ins:
                 mSubtitleVisible = !mSubtitleVisible; getActivity().invalidateOptionsMenu();
                 updateSubtitle();
+                return true;
+            case R.id.help:
+                startActivity(new Intent(getActivity(), WebViewActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

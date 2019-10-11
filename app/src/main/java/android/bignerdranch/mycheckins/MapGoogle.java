@@ -45,7 +45,7 @@ public class MapGoogle extends AppCompatActivity implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10F));
     }
-
+    
    /* public void onLocationChanged(Location location) {
         TextView locationTv = (TextView) findViewById(R.id.map);
         double latitude = location.getLatitude();
