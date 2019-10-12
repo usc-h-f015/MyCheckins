@@ -108,6 +108,7 @@ public class Check_inListFragment extends Fragment {
         mAdapter = new Check_inAdapter(checkins);
         mCheck_inRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setCheck_ins(checkins);
             mAdapter.notifyDataSetChanged();
         }
         updateSubtitle();
@@ -166,6 +167,9 @@ public class Check_inListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCheckins.size();
+        }
+        public void setCheck_ins(List<Check_in> check_ins) {
+            mCheckins = check_ins;
         }
     }
 

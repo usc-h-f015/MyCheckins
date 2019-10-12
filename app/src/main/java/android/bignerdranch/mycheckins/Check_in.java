@@ -23,11 +23,20 @@ public class Check_in {
 
 
     public Check_in() {
-        mId = UUID.randomUUID();
-        mDate = new Date();
+        this(UUID.randomUUID());
+        //mId = UUID.randomUUID();
+        //mDate = new Date();
     }
+    public Check_in(UUID id) {
+        mId = id;
+        mDate = new Date();
+
+    }
+
     public UUID getId() {
-        return mId; }
+        return mId;
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -78,7 +87,7 @@ public class Check_in {
     public void setLocation(String location) {
         mLocation = location;
     }*/
-    public Uri getImage() {
+    public  Uri getImage() {
         return mImage;
     }
     public void setImage(Uri image) {

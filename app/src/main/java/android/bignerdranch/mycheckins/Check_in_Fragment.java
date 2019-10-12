@@ -116,6 +116,13 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         mCheck_in = Check_inLab.get(getActivity()).getCheck_in(check_inId);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Check_inLab.get(getActivity())
+                .updateCheck_in(mCheck_in);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
