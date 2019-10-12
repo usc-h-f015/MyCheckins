@@ -60,6 +60,7 @@ public class Check_in {
     }
     public void setDate(Date date) {
         mDate = date;
+
     }
     public void setLatitude(String latitude){
         mLatitude = latitude;

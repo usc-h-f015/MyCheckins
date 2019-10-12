@@ -17,7 +17,7 @@ public class Check_inCursorWrapper extends CursorWrapper {
         String uuidString = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.UUID));
         String title = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.TITLE));
         String place = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.PLACE));
-        long date = getLong(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.DATE));
+        String date = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.DATE));
         String details = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.DETAILS));
         String latitude = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.LATITUDE));
         String longitude = getString(getColumnIndex(Check_inDbSchema.Check_inTable.Cols.LONGITUDE));

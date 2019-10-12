@@ -19,7 +19,7 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
 
     public static final String EXTRA_DATE =
-            "com.bignerdranch.android.mycheckins.date";
+            "android.bignerdranch.mycheckins.date";
 
     private static final String ARG_DATE = "date";
     private DatePicker mDatePicker;
@@ -43,13 +43,11 @@ public class DatePickerFragment extends DialogFragment {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
 
-
-
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_date, null);
 
         mDatePicker = (DatePicker) v.findViewById(R.id.dialog_date_picker);
-        mDatePicker.init(year, month, day, null);
+        mDatePicker.init(year, month, day,  null);
 
 
         return new AlertDialog.Builder(getActivity())
