@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +21,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,23 +34,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.maps.SupportMapFragment;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import com.google.android.gms.maps.GoogleMap;
+
 
 import java.io.File;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static android.app.Activity.RESULT_OK;
-
-//OnMapReadyCallback
 
 public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final String ARG_CHECK_IN_ID = "check_in_id";
@@ -66,14 +60,11 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private EditText mDetailsField;
     private Button mDateButton;
     private Button mShowLocationButton;
-    private GoogleMap mMap;
-    private SupportMapFragment mSupportMapFragment;
-
+    private Button mShareButton;
 
 
     private Button mCaptureBtn;
     private ImageView mImageView;
-    Uri image_uri;
 
 
     final String TAG = "GPS";
@@ -82,7 +73,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
     private static final int PERMISSION_CODE = 1000;
-    private static final int IMAGE_CAPTURE_CODE = 1001;
+
 
     TextView tvLatitude;
     TextView tvLongitude;
@@ -312,6 +303,20 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                 startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
+
+        mShareButton = (Button) v.findViewById(R.id.shareInformation);
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, getCheck_inReport());
+                //i.putExtra(Intent.EXTRA_SUBJECT,
+                       // getString(R.string.check_in_report_subject));
+                //i = Intent.createChooser(i, getString(R.string.send_report));
+                startActivity(i);
+            }
+        });
+
         return v;
     }
 
@@ -378,6 +383,18 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
                     mPhotoFile.getPath(), getActivity());
             mImageView.setImageBitmap(bitmap);
         }
+    }
+
+    private String getCheck_inReport() {
+        String dateFormat = "EEE, MMM dd";
+        String dateString = DateFormat.format(dateFormat,
+                mCheck_in.getDate().getTime()).toString();
+        String title = mCheck_in.getTitle();
+        String details = mCheck_in.getDetails();
+        String latlong = (mCheck_in.getLatitude() + " " + mCheck_in.getmLongitude());
+        String report = getString(R.string.crime_report,
+                title, dateString, details, latlong);
+        return report;
     }
 
 
