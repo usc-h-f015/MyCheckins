@@ -81,6 +81,9 @@ public class Check_in {
     public Button getmShowLocation() {
         return mShowLocation;
     }
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
 
     /*public String getLocation() {
         return mLocation;

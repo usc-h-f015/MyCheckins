@@ -81,6 +81,11 @@ public class Check_inLab {
             cursor.close();
         }
     }
+    public File getPhotoFile(Check_in check_in) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, check_in.getPhotoFilename());
+    }
+
     public void updateCheck_in(Check_in check_in) {
         String uuidString = check_in.getId().toString();
         ContentValues values = getContentValues(check_in);

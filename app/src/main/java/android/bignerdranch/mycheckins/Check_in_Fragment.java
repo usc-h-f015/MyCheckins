@@ -9,6 +9,8 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -34,13 +36,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.SupportMapFragment;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.maps.GoogleMap;
 
+import java.io.File;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -51,9 +56,11 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private static final String ARG_CHECK_IN_ID = "check_in_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO= 2;
 
 
     private Check_in mCheck_in;
+    private File mPhotoFile;
     private EditText mTitleField;
     private EditText mPlaceField;
     private EditText mDetailsField;
@@ -63,8 +70,9 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
     private SupportMapFragment mSupportMapFragment;
 
 
-    Button mCaptureBtn;
-    ImageView mImageView;
+
+    private Button mCaptureBtn;
+    private ImageView mImageView;
     Uri image_uri;
 
 
@@ -103,6 +111,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         setHasOptionsMenu(true);
         UUID check_inId = (UUID) getArguments().getSerializable(ARG_CHECK_IN_ID);
         mCheck_in = Check_inLab.get(getActivity()).getCheck_in(check_inId);
+        mPhotoFile = Check_inLab.get(getActivity()).getPhotoFile(mCheck_in);
     }
 
     @Override
@@ -274,46 +283,38 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         }
 
 
+
+
         mImageView = v.findViewById(R.id.image_view);
-        mImageView.setImageURI(mCheck_in.getImage());
+        updatePhotoView();
 
 
         mCaptureBtn = v. findViewById(R.id.capture_image_btn);
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        PackageManager packageManager = getActivity().getPackageManager();
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+        mCaptureBtn.setEnabled(canTakePhoto);
         mCaptureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) ==
-                            PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                            PackageManager.PERMISSION_DENIED) {
-                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        requestPermissions(permission, PERMISSION_CODE);
-
-                    }
-                    else {
-                        openCamera();
-                    }
-                }else {
-                    openCamera();
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "android.bignerdranch.mycheckins.fileprovider",
+                        mPhotoFile);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                List<ResolveInfo> cameraActivities = getActivity()
+                        .getPackageManager().queryIntentActivities(captureImage,
+                                PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo activity : cameraActivities) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
+                startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
-
-
-
         return v;
     }
 
-    private void openCamera(){
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "New Picture");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
-        image_uri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
-
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -353,15 +354,14 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
             mCheck_in.setDate(date);
             updateDate();
        }
-        if (resultCode == RESULT_OK){
-            mCheck_in.setImage(image_uri);
-            updatePhoto();
-
-        }/*if (permissions == permissions){
-            mCheck_in.setLatitude(toString());
-            mCheck_in.setLatitude(toString());
-            updateLocation();
-        }*/
+        if (resultCode == REQUEST_PHOTO){
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "android.bignerdranch.mycheckins.fileprovider",
+                    mPhotoFile);
+            getActivity().revokeUriPermission(uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updatePhotoView();
+            }
     }
 
     private void updateDate() {
@@ -369,6 +369,18 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
 
 
         }
+
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mImageView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(), getActivity());
+            mImageView.setImageBitmap(bitmap);
+        }
+    }
+
+
     private void updateLocation(){
         tvLatitude.setText(mCheck_in.getLatitude());
         tvLongitude.setText(mCheck_in.getmLongitude());
@@ -488,7 +500,7 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         switch (requestCode) {
             case PERMISSION_CODE: {
                 if (grantResults.length > 0 && grantResults [0] == PackageManager.PERMISSION_GRANTED){
-                    openCamera();
+                    //openCamera();
                 }
                 else {
                     Toast.makeText(getActivity(), "Permission denied...", Toast.LENGTH_SHORT).show();
@@ -563,12 +575,5 @@ public class Check_in_Fragment extends Fragment implements LocationListener{
         tvLatitude.setText(String.valueOf(loc.getLatitude()));
         tvLongitude.setText(String.valueOf(loc.getLongitude()));
     }
-
-
-    private void updatePhoto() {
-        mImageView.setImageURI(mCheck_in.getImage());
-    }
-
-
 }
 
