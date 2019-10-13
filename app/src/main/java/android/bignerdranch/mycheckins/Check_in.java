@@ -88,7 +88,7 @@ public class Check_in {
     public void setLocation(String location) {
         mLocation = location;
     }*/
-    public  Uri getImage() {
+    public Uri getImage() {
         return mImage;
     }
     public void setImage(Uri image) {

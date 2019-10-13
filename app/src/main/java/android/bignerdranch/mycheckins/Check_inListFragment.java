@@ -1,6 +1,7 @@
 package android.bignerdranch.mycheckins;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,8 +43,6 @@ public class Check_inListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_check_in_list, container, false);
         mCheck_inRecyclerView = (RecyclerView) view.findViewById(R.id.check_in_recycler_view);
         mCheck_inRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //mWebView = (WebView) view.findViewById(R.id.webView);
-        //mWebView.setWebViewClient(new WebViewClient());
         updateUI();
         return view;
     }
@@ -126,9 +126,6 @@ public class Check_inListFragment extends Fragment {
             super(inflater.inflate(R.layout.list_item_check_in, parent, false));
             itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.check_in_title);
-            //Typeface roboto =Typeface.createFromAsset(getContext().getAssets(), "font/Robot-Bold.ttf");
-            //mTitleTextView.setTypeface(roboto);
-
             mDateTextView = (TextView) itemView.findViewById(R.id.date_picker_title);
             mPlaceTextView = (TextView) itemView.findViewById(R.id.check_in_place);
 

@@ -28,7 +28,7 @@ public class MainActivity extends SingleFragmentActivity {
     }
 
     public static final String EXTRA_CHECK_IN_ID =
-            "com.bignerdranch.android.mycheckins.check_in_id";
+            "android.bignerdranch.mycheckins.check_in_id";
     public static Intent newIntent(Context packageContext, UUID check_inId) {
         Intent intent = new Intent(packageContext, MainActivity.class);
         intent.putExtra(EXTRA_CHECK_IN_ID, check_inId);

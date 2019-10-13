@@ -23,6 +23,7 @@ public class Check_inLab {
    //private List<Check_in> mCheckins;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    public static final String KEY_IMAGE = "image";
 
     public static Check_inLab get(Context context) {
         if (sCheck_inLab == null) {
